@@ -24,7 +24,6 @@ class Ship:
         
     
     def update(self):
-
         #move right
         if self.moving_right and self.rect.right < self.screen_rect.right:
             self.x += self.settings.ship_speed
