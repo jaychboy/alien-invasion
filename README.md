@@ -1,5 +1,8 @@
 # alien-invasion
-simple alien invasion game using pygame library
+Simple alien invasion game using the pygame library
+
+#----------------------------------------------------------#
+
 
 Controls:
-Q to escape/quit
+Q - Escape/Quit
