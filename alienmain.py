@@ -9,6 +9,7 @@ from aliensettings import Settings
 
 from ship import Ship
 
+from bullet import Bullet
 #-------------------------------------------------------------------#
 
 class AlienInvasion:
@@ -29,12 +30,15 @@ class AlienInvasion:
 
         self.ship = Ship(self)
 
+        self.bullets = pygame.sprite.Group()
+
     #Rungame func
     def run_game(self):
         #While loop/mainloop
         while True:
             self._check_events()
             self.ship.update()
+            self._update_bullets()
             self._update_screen()
             self.clock.tick(60)
 
@@ -66,6 +70,9 @@ class AlienInvasion:
         elif event.key == pygame.K_q:
             sys.exit()
 
+        elif event.key == pygame.K_SPACE:
+            self._fire_bullet()
+
     def _check_keyup_events(self, event):
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = False                
@@ -73,16 +80,34 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
 
+    def _fire_bullet(self):
+        #Create a new bullet and group it to the bullet group
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
+        
+
     def sfx_click(self, event):
         num = random.randint(1,25)
         if num == 8:
             sfx = pygame.mixer.music.load("fart-with-reverb.mp3")
             pygame.mixer.music.play()
 
+
+    def _update_bullets(self):
+        self.bullets.update()
+
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
+
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
+
         self.ship.blitme()
-        
         pygame.display.flip()
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------#
